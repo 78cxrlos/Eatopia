@@ -1,1 +1,79 @@
 {% extends 'base.html' %}
+
+{% block title %}Home | EATOPIA{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4">Welcome to EATOPIA!</h1>
+        <p class="lead">Your go-to platform for discovering and reviewing restaurants.</p>
+        <a href="{% url 'reviews' %}" class="btn btn-light btn-lg mt-3">View Reviews</a>
+    </div>
+</section>
+
+<!-- Featured Restaurants Section -->
+<section class="featured-restaurants py-5">
+    <div class="container text-center">
+        <h2>Featured Restaurants</h2>
+        <p class="lead mb-4">Discover top-rated dining experiences.</p>
+        <div class="row">
+            {% for restaurant in featured_restaurants %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ restaurant.image_url }}" class="card-img-top" alt="{{ restaurant.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ restaurant.name }}</h5>
+                        <p class="card-text">{{ restaurant.description|truncatewords:20 }}</p>
+                        <a href="{% url 'restaurant_detail' restaurant.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No featured restaurants available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works bg-light py-5">
+    <div class="container text-center">
+        <h2>How It Works</h2>
+        <p class="lead mb-4">Simple steps to discover and share your dining experiences.</p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="icon mb-3">
+                    <i class="fas fa-search fa-3x"></i>
+                </div>
+                <h4>Explore</h4>
+                <p>Search for restaurants in your area and explore their menus.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="icon mb-3">
+                    <i class="fas fa-star fa-3x"></i>
+                </div>
+                <h4>Rate</h4>
+                <p>Leave a rating and review based on your dining experience.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="icon mb-3">
+                    <i class="fas fa-share fa-3x"></i>
+                </div>
+                <h4>Share</h4>
+                <p>Help others by sharing your thoughts and recommendations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2 class="display-4">Ready to Discover Your Next Favorite Restaurant?</h2>
+        <p class="lead">Start exploring reviews and recommendations today.</p>
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg">Get Started</a>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}Reviews | EATOPIA{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Reviews</h2>
+    
+    <!-- Display all reviews -->
+    <div id="reviews-list">
+        {% for review in reviews %}
+            <div class="review-item mb-3 p-3 border rounded">
+                <h4>{{ review.restaurant }}</h4>
+                <p>
+                    <!-- Display filled stars -->
+                    {% for i in review.full_stars %}
+                        <i class="fas fa-star"></i>
+                    {% endfor %}
+                    <!-- Display empty stars -->
+                    {% for i in review.empty_stars %}
+                        <i class="far fa-star"></i>
+                    {% endfor %}
+                </p>
+                <p>{{ review.note }}</p>
+            </div>
+        {% empty %}
+            <p>No reviews yet. Be the first to post one!</p>
+        {% endfor %}
+        {% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+
+    <!-- Button to show the review form -->
+    <div class="text-center mt-4">
+        <button id="add-review-btn" class="btn btn-primary" onclick="toggleReviewForm()">Add a Review</button>
+    </div>
+
+    <!-- Review form (hidden initially) -->
+    <div id="review-form" style="display:none;" class="mt-4">
+        <h3>Post a Review</h3>
+        <form method="POST" action="{% url 'post_review' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="restaurant" class="form-label">Restaurant</label>
+                <input type="text" class="form-control" id="restaurant" name="restaurant" required>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <div class="stars" id="rating">
+                    <i class="fa fa-star" data-value="1"></i>
+                    <i class="fa fa-star" data-value="2"></i>
+                    <i class="fa fa-star" data-value="3"></i>
+                    <i class="fa fa-star" data-value="4"></i>
+                    <i class="fa fa-star" data-value="5"></i>
+                </div>
+                <input type="hidden" id="rating_value" name="rating">
+            </div>
+            <div class="mb-3">
+                <label for="note" class="form-label">Review</label>
+                <textarea class="form-control" id="note" name="note" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Post Review</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Toggle review form visibility
+    function toggleReviewForm() {
+        var form = document.getElementById('review-form');
+        var button = document.getElementById('add-review-btn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            button.innerHTML = 'Cancel';
+        } else {
+            form.style.display = 'none';
+            button.innerHTML = 'Add a Review';
+        }
+    }
+</script>
+
+<script>
+    // Get all star icons
+    const stars = document.querySelectorAll('.stars .fa-star');
+    const ratingValue = document.getElementById('rating_value');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            ratingValue.value = value;
+            updateStars(value);
+        });
+    });
+
+    function updateStars(value) {
+        stars.forEach(star => {
+            if (star.getAttribute('data-value') <= value) {
+                star.classList.add('checked');
+            } else {
+                star.classList.remove('checked');
+            }
+        });
+    }
+</script>
+
+<style>
+    .stars {
+        display: flex;
+        gap: 5px;
+    }
+
+    .fa-star {
+        font-size: 30px;
+        color: gray;
+        cursor: pointer;
+    }
+
+    .fa-star.checked {
+        color: gold;
+    }
+</style>
+{% endblock %}
