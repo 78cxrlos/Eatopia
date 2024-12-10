@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ restaurant.name }} | EATOPIA{% endblock %}
+
+{% block content %}
+<section class="restaurant-details py-5">
+    <div class="container text-center">
+        <h2>{{ restaurant.name }}</h2>
+        <p>{{ restaurant.location }}</p>
+        <img src="{{ restaurant.photo_url }}" alt="{{ restaurant.name }}" class="img-fluid">
+        
+        <h3>Dishes</h3>
+        <div class="row">
+            {% for dish in dishes %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ dish.photo.url }}" class="card-img-top" alt="{{ dish.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ dish.name }}</h5>
+                        <p class="card-text">{{ dish.description }}</p>
+                        <p class="card-text">${{ dish.price }}</p>
+                        <a href="{% url 'add_to_cart' dish.id %}" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No dishes available for this restaurant.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

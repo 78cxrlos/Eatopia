@@ -3,6 +3,16 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Login</h2>
+
+    <!-- Display error messages, if any -->
+    {% if messages %}
+    <div class="alert alert-danger">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">

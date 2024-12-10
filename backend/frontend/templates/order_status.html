@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Status{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1>Your Orders</h1>
+    <ul class="list-group">
+        {% for order in orders %}
+        <li class="list-group-item">
+            <strong>Order #{{ order.id }}</strong><br>
+            Status: {{ order.get_status_display }}<br>
+            Total: ${{ order.total_price }}
+        </li>
+        {% empty %}
+        <li class="list-group-item">No orders placed yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

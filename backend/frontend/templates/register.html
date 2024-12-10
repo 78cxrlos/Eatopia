@@ -5,8 +5,10 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="text-center">Register</h2>
-    <form method="POST" action="{% url 'register' %}">
+    <form method="POST" action="{% url 'register' %}" enctype="multipart/form-data">  
         {% csrf_token %}
+        
+        <!-- User Information -->
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" name="username" required>
@@ -23,7 +25,43 @@
             <label for="password_confirm" class="form-label">Confirm Password</label>
             <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
         </div>
+
+        <!-- User Type Selection -->
+        <div class="mb-3">
+            <label for="user_type" class="form-label">User Type</label>
+            <select class="form-control" id="user_type" name="user_type" onchange="toggleRestaurantFields()" required>
+                <option value="normal">User</option>
+                <option value="restaurant">Restaurant</option>
+            </select>
+        </div>
+
+        <!-- Restaurant Fields (Only shown if user type is restaurant) -->
+        <div id="restaurantFields" style="display: none;">
+            <div class="mb-3">
+                <label for="restaurant_name" class="form-label">Restaurant Name</label>
+                <input type="text" class="form-control" id="restaurant_name" name="restaurant_name">
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="location">
+            </div>
+            <div class="mb-3">
+                <label for="restaurant_photo" class="form-label">Restaurant Photo</label>
+                <input type="file" class="form-control" id="restaurant_photo" name="restaurant_photo">
+            </div>
+        </div>
+
+        <!-- Submit Button -->
         <button type="submit" class="btn btn-primary w-100">Register</button>
     </form>
 </div>
+
+<!-- JavaScript to toggle restaurant fields -->
+<script>
+    function toggleRestaurantFields() {
+        const userType = document.getElementById('user_type').value;
+        const restaurantFields = document.getElementById('restaurantFields');
+        restaurantFields.style.display = userType === 'restaurant' ? 'block' : 'none';
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Orders{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1>Pending Orders</h1>
+    <ul class="list-group">
+        {% for order in orders %}
+        <li class="list-group-item">
+            <strong>Order #{{ order.id }}</strong><br>
+            Customer: {{ order.customer.username }}<br>
+            Total: ${{ order.total_price }}<br>
+
+            {% if order.status == 'approved' %}
+                <span class="badge bg-success">Approved</span>
+            {% elif order.status == 'denied' %}
+                <span class="badge bg-danger">Denied</span>
+            {% else %}
+                <form method="POST" action="{% url 'manage_order' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                    <button type="submit" name="action" value="deny" class="btn btn-danger">Deny</button>
+                </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% if messages %}
+    <div class="alert alert-info mt-3">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

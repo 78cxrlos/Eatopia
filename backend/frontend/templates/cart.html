@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart | EATOPIA{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1>Your Cart</h1>
+    <p>Items in your cart:</p>
+    <ul class="list-group">
+        {% for item in cart_items %}
+        <li class="list-group-item">
+            {{ item.dish.name }} - ${{ item.dish.price }} 
+        </li>
+        {% empty %}
+        <li class="list-group-item">Your cart is empty.</li>
+        {% endfor %}
+    </ul>
+    <button id="checkout-button" class="btn btn-success mt-3">Proceed to Checkout</button>
+</div>
+
+<script>
+    document.getElementById('checkout-button').addEventListener('click', function () {
+        fetch("{% url 'proceed_to_checkout' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                window.location.href = "{% url 'order_status' %}"; // Redirect to order status
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+{% endblock %}

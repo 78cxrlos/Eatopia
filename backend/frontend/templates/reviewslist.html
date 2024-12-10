@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .reviews {
+            list-style-type: none;
+            padding: 0;
+        }
+        .review-item {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .review-item h2 {
+            margin: 0;
+            color: #007BFF;
+        }
+        .review-item .rating {
+            color: gold;
+        }
+        .review-item p {
+            font-size: 1rem;
+            color: #555;
+        }
+        .add-review {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .add-review a {
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+        .add-review a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>All Reviews</h1>
+
+    <!-- Display reviews -->
+    <ul class="reviews">
+        {% for review in reviews %}
+            <li class="review-item">
+                <h2>{{ review.restaurant }}</h2>
+                <p class="rating">
+                    {% for i in 1|to:review.rating %}
+                        <i class="fas fa-star"></i>
+                    {% endfor %}
+                    {% for i in review.rating|to:5 %}
+                        <i class="far fa-star"></i>
+                    {% endfor %}
+                </p>
+                <p>{{ review.note }}</p>
+            </li>
+        {% empty %}
+            <p>No reviews yet. Be the first to post one!</p>
+        {% endfor %}
+    </ul>
+
+    <!-- Button to navigate to the review form -->
+    <div class="add-review">
+        <a href="{% url 'post_review' %}">Post a Review</a>
+    </div>
+</div>
+
+</body>
+</html>
